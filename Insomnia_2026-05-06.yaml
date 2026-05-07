@@ -1,0 +1,214 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Ncapas
+meta:
+  id: wrk_e7296149ffd24460a1f339475d657ff4
+  created: 1778091406746
+  modified: 1778091406746
+  description: ""
+collection:
+  - name: Labo Guiado
+    meta:
+      id: fld_0ecc226f4d71443589f96e7f152e8b46
+      created: 1778091419203
+      modified: 1778091419203
+      sortKey: -1778091419203
+      description: ""
+  - name: Labo2
+    meta:
+      id: fld_898e6d04e5774bb4ba96efc4d340d90e
+      created: 1778102402449
+      modified: 1778102402449
+      sortKey: -1778102402449
+      description: ""
+    children:
+      - url: "{{ _.url }}/api/wizards"
+        name: GetWizards
+        meta:
+          id: req_5e1b342c45fe47ce9fd18e9e02936e7c
+          created: 1778102409796
+          modified: 1778102542913
+          isPrivate: false
+          description: ""
+          sortKey: -1778102409796
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.url }}/api/wizards"
+        name: AddWizard
+        meta:
+          id: req_447f030ba4c74e748e28ec09e1d9c60a
+          created: 1778102563708
+          modified: 1778102975069
+          isPrivate: false
+          description: ""
+          sortKey: -1778102563708
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nombre": "Voldemort",
+            	"casa": "Hell",
+            	"patronus": "Snake",
+            	"esMortifago": true
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.url }}/api/wizards/deatheaters"
+        name: GetAllDeatheaters
+        meta:
+          id: req_a2935de1c0664abbbd780fd896150987
+          created: 1778102682326
+          modified: 1778102733511
+          isPrivate: false
+          description: ""
+          sortKey: -1778102682326
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.url }}/api/wizards/delete/"
+        name: DeleteWizard
+        meta:
+          id: req_39ac9bcd7ab14c73899a829730c7cdaf
+          created: 1778102886845
+          modified: 1778115025891
+          isPrivate: false
+          description: ""
+          sortKey: -1778102682426
+        method: DELETE
+        parameters:
+          - name: id
+            value: "null"
+            description: ""
+            disabled: false
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.url }}/api/wizards/patronus/"
+        name: New Request
+        meta:
+          id: req_57ca792a371c4f00942b03f5c6cfd569
+          created: 1778114701471
+          modified: 1778114908102
+          isPrivate: false
+          description: ""
+          sortKey: -1778114701471
+        method: GET
+        parameters:
+          - name: patronus
+            value: Snake
+            description: ""
+            disabled: false
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.url }}/api/wizards/{id}"
+        name: New Request
+        meta:
+          id: req_f6dac9207081423eb8ea0ca7cfc5c9e9
+          created: 1778114768167
+          modified: 1778115083255
+          isPrivate: false
+          description: ""
+          sortKey: -1778114768167
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nombre": "El que no debe ser nombrado",
+            	"casa": "Slitherin",
+            	"patronus": "Snake",
+            	"esMortifago": false
+            }
+        parameters:
+          - name: id
+            value: 7c6a94a7-2f65-4936-b7ab-1a6a70eb7b74
+            description: ""
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_3e591d275b2a0d6370a82954a3546738fcdc4b68
+    created: 1778091406764
+    modified: 1778091406764
+environments:
+  name: Base Environment
+  meta:
+    id: env_3e591d275b2a0d6370a82954a3546738fcdc4b68
+    created: 1778091406757
+    modified: 1778091517437
+    isPrivate: false
+  data:
+    url: http://localhost:8080
