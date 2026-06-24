@@ -1,0 +1,100 @@
+name: CI/CD - Registro Magos
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  # Job 1: Compilar y correr tests unitarios
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: code-checkout
+        uses: actions/checkout@v4
+
+      - name: JDK-configuration
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build + Tests
+        run: ./mvnw clean verify -B
+
+      - name: publish test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: target/surefire-reports/
+
+  # Job 2: Smoke test con docker compose
+  smoke-test-compose:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: code-checkout
+        uses: actions/checkout@v4
+
+      - name: Create test .env
+        run: |
+          cat <<END > .env
+          DATABASE_NAME=registro_magos_ci
+          DATABASE_USERNAME=ci_user
+          DATABASE_PASSWORD=ci_password
+          SPRING_JPA_SHOW_SQL=false
+          SPRING_JPA_HIBERNATE_DDL=update
+          SPRING_JPA_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+          SPRING_APPLICATION_NAME=registro-magos-ci
+          END
+
+      - name: docker-compose-up
+        run: docker compose up --build -d
+
+      - name: wait-response
+        run: |
+          for i in $(seq 1 15); do
+            if curl -s http://localhost:8080/api/wizards -o /dev/null; then
+              echo "La aplicación respondió correctamente."
+              exit 0
+            fi
+            echo "Esperando que la app inicie... ($i/15)"
+            sleep 5
+          done
+          echo "La app no respondió a tiempo"
+          exit 1
+
+      - name: show-logs
+        if: failure()
+        run: docker compose logs
+
+      - name: shutdown
+        if: always()
+        run: docker compose down -v
+
+  # Job 3: Push a Docker Hub (solo en main)
+  push-to-dockerhub:
+    needs: smoke-test-compose
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: code-checkout
+        uses: actions/checkout@v4
+
+      - name: Login a Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build y Push imagen
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/registro-magos:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/registro-magos:${{ github.sha }}
