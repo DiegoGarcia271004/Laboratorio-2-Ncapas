@@ -1,4 +1,4 @@
-name: CI/CD - Registro Magos
+name: CI - Registro Magos
 
 on:
   push:
@@ -74,27 +74,3 @@ jobs:
       - name: shutdown
         if: always()
         run: docker compose down -v
-
-  # Job 3: Push a Docker Hub (solo en main)
-  push-to-dockerhub:
-    needs: smoke-test-compose
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    steps:
-      - name: code-checkout
-        uses: actions/checkout@v4
-
-      - name: Login a Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build y Push imagen
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/registro-magos:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/registro-magos:${{ github.sha }}
