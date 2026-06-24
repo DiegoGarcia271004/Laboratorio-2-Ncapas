@@ -41,15 +41,12 @@ jobs:
 
       - name: Create test .env
         run: |
-          cat <<END > .env
-          DATABASE_NAME=registro_magos_ci
-          DATABASE_USER=ci_user
-          DATABASE_PASSWORD=ci_password
-          SPRING_JPA_SHOW_SQL=false
-          SPRING_JPA_HIBERNATE_DDL=update
-          SPRING_JPA_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
-          SPRING_APPLICATION_NAME=registro-magos-ci
-          END
+          echo "DB_URL=jdbc:postgresql://db:5432/registro_magos_ci" >> .env
+          echo "DB_USER=ci_user" >> .env
+          echo "DB_PASSWORD=ci_password" >> .env
+
+      - name: Verify .env
+        run: cat .env
 
       - name: docker-compose-up
         run: docker compose up --build -d
