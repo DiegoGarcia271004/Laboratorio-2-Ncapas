@@ -68,7 +68,7 @@ jobs:
           exit 1
 
       - name: show-logs
-        if: failure()
+        if: always()
         run: docker compose logs
 
       - name: shutdown
