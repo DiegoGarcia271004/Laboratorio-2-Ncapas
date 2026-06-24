@@ -43,7 +43,7 @@ jobs:
         run: |
           cat <<END > .env
           DATABASE_NAME=registro_magos_ci
-          DATABASE_USERNAME=ci_user
+          DATABASE_USER=ci_user
           DATABASE_PASSWORD=ci_password
           SPRING_JPA_SHOW_SQL=false
           SPRING_JPA_HIBERNATE_DDL=update
